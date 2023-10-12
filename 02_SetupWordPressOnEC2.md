@@ -62,7 +62,12 @@ sudo chown -R apache:apache /var/www/html/wordpress
 sudo chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R
 ```
 
-10. Continue the configuration via the webpage at: `http://IPADDR/wordpress`
+10. Make the changes to SELinux so that httpd can make outward connection (as it needs to connect to the external db server)
+```bash
+setsebool -P httpd_can_network_connect 1
+```
+
+11. Continue the configuration via the webpage at: `http://IPADDR/wordpress`
 
 
 ## Automate Installation on Instance Launch
@@ -94,6 +99,7 @@ tar xf wordpress.tar.gz
 cp -r wordpress /var/www/html
 chown -R apache:apache /var/www/html/wordpress
 chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R
+setsebool -P httpd_can_network_connect 1
 ```
 
 Wait for the instance launch state to turn to `Running`, and the Status Check to reach `2/2 checks passed`.  You can get a coffee in the meantime.  
